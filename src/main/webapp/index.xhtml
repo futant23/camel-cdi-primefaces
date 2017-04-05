@@ -1,0 +1,78 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:bnu="http://bootsfaces.net/ui" >
+    <h:head>
+
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <h2>Camel Basic demo</h2>
+
+        <!-- notification pane popout -->
+        <p:notificationBar position="top" effect="slide" styleClass="top" widgetVar="bar">
+            <h:outputText value="PrimeFaces Rocks!" style="font-size:36px;" />
+             <p:commandButton value="Hide" onclick="PF('bar').hide()" type="button" icon="ui-icon-arrow-1-n"/>
+        </p:notificationBar>
+
+      
+
+        <h:outputText value="#{sessionManager.name}" />
+
+         <p:commandButton value="Show" onclick="PF('bar').show()" type="button" icon="ui-icon-arrow-1-s"/>
+       
+        
+        <h:form id="form">
+            <h:panelGrid columns="2" styleClass="default">
+
+                <h:outputLabel for="message" value="Enter Message: " />
+
+                <p:inputText id="message" value="#{manager.message}" />
+
+
+                <p:commandButton actionListener="#{manager.send}" styleClass="buttons" value="Simple Route" update="response"/>
+                <h:outputText id="response" value="#{manager.output}" />
+                <p> blah blah blah </p>
+                <p:outputLabel id="notify" value="#{manager.notify}" />
+
+                <p:outputLabel id="data" value="#{manager.data}"/>
+
+                <p:tooltip id="toolTipFade" for="message" value="Enter your Service Request" position="top"/>
+
+
+                <br />
+                <ui:debug />
+            </h:panelGrid>
+
+        </h:form>
+
+        <!-- dynamic updates via Events  -->
+        <p:socket channel="/notify"> 
+            <p:ajax event="message" update="form:notify"  />
+        </p:socket>
+
+        <p:socket channel="/message"> 
+            <p:ajax event="message" update="form:data"  />
+        </p:socket>
+
+
+        <p:dataTable var="session" value="#{sessionManager.all}">
+            <p:column headerText="Id">
+                <h:outputLabel value="#{session.id}" />
+            </p:column>
+
+            <p:column headerText="Shiznit">
+                <h:outputText value="#{session.servletContext.contextPath}" />
+            </p:column>
+
+        </p:dataTable>
+
+
+    </h:body>
+</html>
+
